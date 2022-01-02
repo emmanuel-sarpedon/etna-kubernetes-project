@@ -74,7 +74,7 @@ router.get("/offers", async (req, res) => {
     }
 
     const offers = await Offer.find(filters)
-      .populate("owner")
+      .populate("owner","account")
       .sort(sorting)
       .limit(resultsPerPage)
       .skip(skip);
@@ -89,7 +89,7 @@ router.get("/offers", async (req, res) => {
 
 router.get("/offer/:id", async (req, res) => {
   try {
-    const offer = await Offer.findById(req.params.id).populate("owner");
+    const offer = await Offer.findById(req.params.id).populate("owner", "account");
 
     if (offer) {
       res.status(200).json(offer);
