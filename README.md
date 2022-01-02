@@ -22,6 +22,15 @@ kubectl expose deployment vinted --type=NodePort --port=3000 #expose port 3000
 minikube service vinted --url #return API url deployed on Kubernetes
 kubectl scale deployment/vinted --replicas=3 #create 3 replicas (default 1)
 ```
+
+# Helm
+```zsh
+helm install vinted-chart helm/vinted/ --values helm/vinted/values.yaml
+
+export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services vinted-chart)
+export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+echo http://$NODE_IP:$NODE_PORT
+```
 ---
 # Bienvenue sur mon API Vinted !
 
