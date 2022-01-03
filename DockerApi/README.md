@@ -9,15 +9,14 @@
 ---
 # Docker (local image only)
 ```zsh
-chmod u+x ./docker-*.sh #give execution privileges - only on first use
-./docker-build.sh #build image - only on first use
-./docker-run.sh #run image
+docker build -t vinted-api . #build image - only on first use
+docker run -dp 4242:3000 vinted-api #run image and forward API port 3000 to host port 4242
 ```
 
 # Kubernetes (via minikube)
 ```zsh
-minikube start #create cluster
-kubectl create deployment vinted --image=emmanuelsarpedon/vinted:fix #create deployment
+minikube start #create cluster and start minikube service
+kubectl create deployment vinted --image=emmanuelsarpedon/vinted:latest #create deployment
 kubectl expose deployment vinted --type=NodePort --port=3000 #expose port 3000
 minikube service vinted --url #return API url deployed on Kubernetes
 kubectl scale deployment/vinted --replicas=3 #create 3 replicas (default 1)
