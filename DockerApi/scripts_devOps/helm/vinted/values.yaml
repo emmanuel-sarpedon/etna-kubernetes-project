@@ -6,7 +6,7 @@ replicaCount: 3
 
 image:
   repository: emmanuelsarpedon/vinted
-  tag: fix
+  tag: latest
   pullPolicy: Always
 
 imagePullSecrets: []
