@@ -21,13 +21,8 @@ docker run -dp 4242:3000 local/vinted #run image and forward API port 3000 to ho
 ```
 ## Step 2 - Kubernetes - Run local image on pod
 ```zsh
-kubectl run vinted-pod --image='local/vinted' --image-pull-policy='Never'
-```
-## K8s deployment
-```zsh
-kubectl apply -f ./kubernetes/vinted.yml
-kubectl expose deployment vinted-deploy --type=NodePort --port=3000
-minikube service vinted-deploy --url
+kubectl run vinted-pod --image='local/vinted' --image-pull-policy='Never' --expose=true --port=3000
+kubectl port-forward vinted-pod 4242:3000
 ```
 
 ## Step 3 - Helm
