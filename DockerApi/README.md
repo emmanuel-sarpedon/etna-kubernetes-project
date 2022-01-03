@@ -38,35 +38,6 @@ export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].
 export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
 echo http://$NODE_IP:$NODE_PORT
 ```
----
-# Bienvenue sur mon API Vinted !
-
-Cet API est une réplique des fonctionnalités de base du site Vinted, à savoir :
-
-- Inscription d'un nouvel utilisateur
-- Connexion d'un utilisateur existant
-- Publication d'une offre
-- Visualiser toutes les offres existantes ou une offre précise
-- Modifier une offre
-- Supprimer une offre
-
-Le back-end a été codé en Javascript avec les packages npm suivants :
-
-- Express / Express-formidable pour le routage
-- Mongoose pour la création de modèles et la mise-à-jour de notre base de données MongoDB
-- Cloudinary pour le stockage des photos
-- Crypto-JS pour le hachage des mots de passes
-- Stripe pour le paiement
-
-Si vous souhaitez tester l'API, merci d'utiliser cette adresse : <https://api-vinted.herokuapp.com/>.
-
-Vous ne pourrez pas utiliser les fonctionnalités sur votre `localhost`car l'API utilise des variables d'environnement pour s'identifier auprès de MongoDB Atlas.
-
-Pour simuler les requêtes HTTP, vous pouvez utiliser un utilitaire comme Postman : <https://www.postman.com/downloads/>
-
-D'ailleurs, dans la suite de la documentation, les illustrations utilisées sont des captures d'écrans de l'interface graphique de Postman.
-
-Le front-end de la réplique Vinted est en cours de développement. Pour suivre son avancement, il faut se rendre sur ce repo : <https://github.com/emmanuel-sarpedon/vinted-front-end>
 
 ---
 
