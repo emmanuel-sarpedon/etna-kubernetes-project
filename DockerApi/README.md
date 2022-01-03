@@ -1,30 +1,38 @@
 # Groupe de sarped_e 941855
 
-### Documentation en cours de rédaction ⚙️
-
 #### Repo - Github : <https://github.com/emmanuel-sarpedon/vinted-backend>
 
 #### API : <https://api-vinted.herokuapp.com/>
 
 ---
-# Docker (local image only)
-```zsh
-docker build -t vinted-api . #build image - only on first use
-docker run -dp 4242:3000 vinted-api #run image and forward API port 3000 to host port 4242
-```
 
-# Kubernetes (via minikube)
+# Containerization
+
 ```zsh
 minikube start #create cluster and start minikube service
-kubectl create deployment vinted --image=emmanuelsarpedon/vinted:latest #create deployment
-kubectl expose deployment vinted --type=NodePort --port=3000 #expose port 3000
-minikube service vinted --url #return API url deployed on Kubernetes
-kubectl scale deployment/vinted --replicas=3 #create 3 replicas (default 1)
+minikube docker-env
+eval $(minikube -p minikube docker-env) #allow to run local docker image on k8s
 ```
 
-# Helm
+## Step 1 - Docker
 ```zsh
-helm install vinted-chart helm/vinted/ --values helm/vinted/values.yaml
+docker build . -t local/vinted #build image - only on first use
+docker run -dp 4242:3000 local/vinted #run image and forward API port 3000 to host port 4242
+```
+## Step 2 - Kubernetes - Run local image on pod
+```zsh
+kubectl run vinted-pod --image='local/vinted' --image-pull-policy='Never'
+```
+## K8s deployment
+```zsh
+kubectl apply -f ./kubernetes/vinted.yml
+kubectl expose deployment vinted-deploy --type=NodePort --port=3000
+minikube service vinted-deploy --url
+```
+
+## Step 3 - Helm
+```zsh
+helm install vinted-chart ./helm/vinted/ --values ./helm/vinted/values.yaml
 
 export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services vinted-chart)
 export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
