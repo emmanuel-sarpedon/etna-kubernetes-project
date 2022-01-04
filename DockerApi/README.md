@@ -6,7 +6,7 @@
 
 ---
 
-# /!\ Prerequisite
+# Prerequisite
 
 ```zsh
 minikube start #create cluster and start minikube service
