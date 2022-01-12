@@ -1,38 +1,6 @@
-# Groupe de sarped_e 941855
-
 #### Repo - Github : <https://github.com/emmanuel-sarpedon/vinted-backend>
 
 #### API : <https://api-vinted.herokuapp.com/>
-
----
-
-# Prerequisite
-
-```zsh
-minikube start #create cluster and start minikube service
-minikube docker-env
-eval $(minikube -p minikube docker-env) #allow to run local docker image on k8s
-```
-
-## Step 1 - Docker
-```zsh
-docker build . -t local/vinted #build image - only on first use
-docker run -dp 4242:3000 local/vinted #run image and forward API port 3000 to host port 4242
-```
-## Step 2 - Kubernetes - Run local image on pod
-```zsh
-kubectl run vinted-pod --image='local/vinted' --image-pull-policy='Never' --expose=true --port=3000
-kubectl port-forward vinted-pod 4242:3000
-```
-
-## Step 3 - Helm
-```zsh
-helm install vinted-chart ./helm/vinted/ --values ./helm/vinted/values.yaml
-
-export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services vinted-chart)
-export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
-echo http://$NODE_IP:$NODE_PORT
-```
 
 ---
 

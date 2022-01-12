@@ -10,20 +10,49 @@
 
 ```zsh
 minikube start #create cluster and start minikube service
+
+#to run local docker image on k8s, if public registry used, these commands are not necessary
 minikube docker-env
-eval $(minikube -p minikube docker-env) #allow to run local docker image on k8s
+eval $(minikube -p minikube docker-env) 
 ```
 
 ## Step 1 - Docker
 ```zsh
-docker build . -t local/vinted #build image - only on first use
+docker build -t local/vinted . #build image - only on first use
 docker run -dp 4242:3000 local/vinted #run image and forward API port 3000 to host port 4242
 ```
+ou en prévision d'un pull sur le registry Docker Hub
+
+```zsh
+docker build -t emmanuelsarpedon/vinted:latest .
+docker run -dp 4242:3000 emmanuelsarpedon/vinted
+
+docker ps #identify the container and note its id
+docker commit <containerID>
+docker push emmanuelsarpedon/vinted:latest
+```
+
 ## Step 2 - Kubernetes - Run local image on pod
 ```zsh
+#here kubectl command is an alias for 'minikube kubectl --'
 kubectl run vinted-pod --image='local/vinted' --image-pull-policy='Never' --expose=true --port=3000
 kubectl port-forward vinted-pod 4242:3000
 ```
+ou créer un déploiement à partir d'une image stockée sur Docker Hub
+
+```zsh
+kubectl create deployment vinted --image=emmanuelsarpedon/vinted:latest
+kubectl scale --replicas=3 deployment vinted #3 replicas (2 new pods created)
+kubectl expose deployment vinted --type=LoadBalancer --port=4242 --target-port=3000 #expose pods port 3000 on port 4242 local
+minikube tunnel
+
+kubectl get service
+> NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+> kubernetes   ClusterIP      10.96.0.1     <none>        443/TCP          7d1h
+> vinted       LoadBalancer   10.105.3.33   10.105.3.33   4242:32104/TCP   7m52s
+```
+
+on peut se connecter en local sur l'adresse 10.105.3.33:4242 pour accéder à l'API
 
 ## Step 3 - Helm
 ```zsh
