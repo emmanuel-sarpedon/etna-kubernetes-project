@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vinted-deploy
+  name: vinted-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: vinted-deploy
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: vinted-deploy
+    spec:
+      containers:
+      - image: emmanuelsarpedon/vinted:1
+        name: vinted
+        resources: {}
+status: {}

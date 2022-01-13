@@ -5,9 +5,8 @@
 replicaCount: 3
 
 image:
-  repository: local/vinted
-  tag: latest
-  pullPolicy: Never
+  repository: emmanuelsarpedon/vinted
+  tag: 1
 
 imagePullSecrets: []
 nameOverride: "vinted-app"
